@@ -40,6 +40,23 @@ public class Evaluator {
         return output;
     }
     public String game_over(Board board) {
-        return "O";
+        int[] board_o = convert_board(board, "O");
+        int[] board_x = convert_board(board, "X");
+        for(int i = 0; i<eval.length; i++)
+        {
+            if( (board_o[0] & eval[i]) == eval[i] || (board_o[1] & eval[i]) == eval[i] ) 
+                return "O";
+            if( (board_x[0] & eval[i]) == eval[i] || (board_x[1] & eval[i]) == eval[i] )
+                return "X";
+        }
+       
+        for(int i = 0; i<diag_eval.length; i++)
+        {
+            if( (board_o[0] & diag_eval[i]) == diag_eval[i] || (board_o[1] & diag_eval[i]) == diag_eval[i] ) 
+                return "O";
+            if( (board_x[0] & diag_eval[i]) == diag_eval[i] || (board_x[1] & diag_eval[i]) == diag_eval[i] )
+                return "X";
+        }
+        return null;
     }
 }

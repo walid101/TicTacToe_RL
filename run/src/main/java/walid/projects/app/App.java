@@ -101,10 +101,17 @@ public class App extends Application {
                                 game_ai.nextMove(tic_tac_toe, "X");
                             }
                             tic_tac_toe.turn = tic_tac_toe.turn == 0 ? 1 : 0;
+                            String winner = game_eval.game_over(tic_tac_toe);
+                            if(winner != null)
+                            {
+                                System.out.println(winner + " WINS! Thanks for Playing :]");
+                                System.exit(0);
+                            }
                         }
-                        System.out.println(
-                            "Row Major: " + Integer.toBinaryString(game_eval.convert_board(tic_tac_toe, "O")[0]) + "\n" +
-                            "Col Major: " + Integer.toBinaryString(game_eval.convert_board(tic_tac_toe, "O")[1]));
+                        // System.out.println(
+                        //     "Row Major: " + Integer.toBinaryString(game_eval.convert_board(tic_tac_toe, "O")[0]) + "\n" +
+                        //     "Col Major: " + Integer.toBinaryString(game_eval.convert_board(tic_tac_toe, "O")[1]));
+
                     }
                 };
             }
