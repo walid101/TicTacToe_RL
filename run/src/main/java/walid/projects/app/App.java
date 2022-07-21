@@ -14,6 +14,9 @@ import java.util.Arrays;
 
 import walid.projects.app.Board;
 import walid.projects.app.Evaluator;
+import walid.projects.app.ai.ai;
+import walid.projects.app.ai.easyai;
+import walid.projects.app.ai.hardai;
 /**
  * JavaFX App
  */
@@ -105,7 +108,9 @@ public class App extends Application {
                             if(winner != null)
                             {
                                 System.out.println(winner + " WINS! Thanks for Playing :]");
-                                System.exit(0);
+                                scene = start_scene(stage);
+                                stage.setScene(scene); 
+                                //System.exit(0);
                             }
                         }
                         // System.out.println(

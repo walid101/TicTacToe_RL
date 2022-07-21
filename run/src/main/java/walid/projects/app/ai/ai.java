@@ -1,4 +1,4 @@
-package walid.projects.app;
+package walid.projects.app.ai;
 import walid.projects.app.Board;
 
 public interface ai {

@@ -1,5 +1,7 @@
-package walid.projects.app;
+package walid.projects.app.ai;
 import java.util.Arrays;
+
+import walid.projects.app.Board;
 public class easyai implements ai{
 
     @Override
