@@ -1,62 +1,51 @@
 package walid.projects.app.ai;
 
+import java.util.ArrayList;
+import java.util.Optional;
+
 import walid.projects.app.Board;
 import walid.projects.app.Evaluator;
 
 public class hardai implements ai {
-
-    public class State {
-        private double r;
-        public State()
+    public class QState {
+        public int board;
+        public int q_val;
+        public QState(int init_board, Optional<Integer> init_q_val)
         {
-            this.r = 0; //initial state reward = 0
-        }
-        public double get_reward() {
-            return r;
-        }
-        public void set_reward_by_state(String agent_delim, Board table) {
-            Evaluator eval = new Evaluator(table.board.length);
-            String winner = eval.game_over(table);
-            if(winner != null)
-            {
-                if(winner.equals(agent_delim) == false)
-                    this.r = -1; //lost
-                else
-                    this.r = 1; //won
-            }
-        }   
-    }
-    public class StateAction {
-        private State state;
-        private int[] action;
-        public StateAction(State init_state, int[] init_action) {
-            state = init_state;
-            action = init_action;
-        }
-        public State getState()
-        {
-            return state;
-        }
-        public int[] getAction()
-        {
-            return action;
-        }
-        public void setState(State newState)
-        {
-            this.state = newState;
-        }
-        public void setAction(int[] newAction)
-        {
-            this.action = newAction;
+            this.board = init_board;
+            this.q_val = init_q_val.isPresent() ? init_q_val.get() : 0;
         }
     }
     public class Agent {
-        private StateAction[][] q_table; //index by row byte representation of table
+        private ArrayList<ArrayList<QState>> q_table; //row indices are all the STATES, column indeces are all the next possible
         private Evaluator eval;
-        public Agent(int q_height, int q_width)
+        private char delim;
+        public Agent(int q_height, int q_width, Optional<Character> delim)
         {
             eval = new Evaluator(q_height);
-            q_table = new State[q_height][q_width];
+            this.q_table = new ArrayList<ArrayList<QState>>((int)Math.pow(2, q_height * q_width));
+            if(delim.isPresent())
+                this.delim = delim.get();
+            else
+                this.delim = 'O';
+            // for(int i = 0; i<this.q_table.size(); i++)
+            // {
+            //     int[] states = this.eval.nextStates(board, delim)
+            //     ArrayList<QState> q_states = new ArrayList<>();
+            // }
+        }
+        public void setQValue(int value, Board state, Board postAction)
+        {
+            int row = eval.convert_board(state, this.delim + "")[0];
+            int col = eval.convert_board(postAction,this.delim + "")[0];
+            try {
+                this.q_table.get(row).set(col, new QState(col, Optional.of(value)));
+            } catch (Exception e) {};
+        }
+        public int stateReward(Board state)
+        {
+            String winning_delim = eval.game_over(state);
+            return winning_delim != null ? winning_delim.charAt(0) != this.delim ? -1 : 1: 0;
         }
         public int[] move(Board table)
         {

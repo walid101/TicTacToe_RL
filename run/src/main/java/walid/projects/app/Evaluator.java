@@ -1,5 +1,7 @@
 package walid.projects.app;
 
+import java.util.ArrayList;
+
 public class Evaluator {
     public int eval[];
     public int diag_eval[];
@@ -58,5 +60,28 @@ public class Evaluator {
                 return "X";
         }
         return null;
+    }
+    public int[] nextStates(Board board, String delim)
+    {   
+        ArrayList<Integer> output = new ArrayList<>();
+        String[][] table = board.getBtnLabels();
+        for(int r = 0; r<table.length; r++)
+        {
+            for(int c = 0; c<table[r].length; c++)
+            {
+                if(table[r][c] == null || table[r][c].length() == 0)
+                {
+                    board.setBoardBtn(r, c, delim);
+                    output.add(this.convert_board(board, delim)[0]);
+                    board.setBoardBtn(r, c, null);
+                }
+            }
+        }
+        int[] final_output = new int[output.size()];
+        for(int i = 0; i<final_output.length; i++)
+        {
+            final_output[i] = output.get(i);
+        }
+        return final_output;
     }
 }
